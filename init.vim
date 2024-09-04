@@ -1,44 +1,93 @@
+" Автоматическая установка плагинов при первом запуске
+" Этот код автоматически установит плагины, которые еще не были установлены,
+" при первом запуске Vim, что позволяет управлять зависимостями легче.
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
     \| PlugInstall --sync | source $MYVIMRC
     \| endif
 
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Инициализация плагинов
 call plug#begin('~/.local/share/nvim/plugged')
-Plug 'https://github.com/preservim/nerdtree'
-Plug 'https://github.com/ryanoasis/vim-devicons'
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'ryanoasis/vim-devicons'
-Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-Plug 'jiangmiao/auto-pairs'
-Plug 'https://github.com/907th/vim-auto-save'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Подключение популярных плагинов
+Plug 'preservim/nerdtree'                
+Plug 'vim-airline/vim-airline'           
+Plug 'kaicataldo/material.vim', { 'branch': 'main' } 
+Plug 'jiangmiao/auto-pairs'              
+Plug '907th/vim-auto-save'               
+Plug 'voldikss/vim-floaterm'             
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
+Plug 'terryma/vim-multiple-cursors'
+"Plug 'ryanoasis/vim-devicons'            
+
 call plug#end()
 
+" Включение поддержки плагинов по типу файла
 filetype plugin on
 
-let g:auto_save_write_all_buffers = 1
-let g:webdevicons_enable_nerdtree = 1
-let g:NERDTreeQuitOnOpen = 1
-
-:colorscheme material
-:set number
-:set relativenumber
-:set smarttab
-:set tabstop=4
-:set shiftwidth=4
-:set softtabstop=4
-:set encoding=UTF-8
-:set autoindent
 
 
+" Настройки плагинов
+
+let g:auto_save_write_all_buffers = 1        
+let g:webdevicons_enable_nerdtree = 1        
+let g:NERDTreeQuitOnOpen = 1                  
+"let g:webdevicons_enable = 1
+"let g:airline_powerline_fonts = 1
+"let g:DevIconsEnableFoldersOpenClose = 1
+let g:NERDTreeHighlightFolders = 1
+
+" Настройки Floaterm (плавающий терминал)
+let g:floaterm_width = 0.8                     
+let g:floaterm_height = 0.4                    
+let g:floaterm_position = 'bottom'              
+
+" Цветовая схема
+colorscheme material                            
+
+" Основные настройки редактирования
+set guifont=Hurmit\ Nerd\ Font:h11
+set noswapfile                                  
+set number                                      
+set relativenumber                               
+set smarttab                                    
+set tabstop=4                                   
+set shiftwidth=4                                
+set softtabstop=4                               
+set encoding=UTF-8                              
+set autoindent                                  
+set belloff=all
+
+" Сочетания клавиш для NERDTree и терминала
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
-nnoremap <C-b> :!bash build.sh<CR>
+nnoremap <S-Z> :NERDTreeToggle<CR>
+nnoremap <S-F> :NERDTreeFind<CR>
+nnoremap <S-B> :!bash build.sh<CR>
+nnoremap <S-T> :FloatermToggle<CR> 
 
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent><expr> <c-@> coc#refresh()
+" Новые сочетания клавиш
+nnoremap <C-w> :q<CR>          
+nnoremap <S-o> :FZF<CR>
+nnoremap <S-,> :e ~/.config/nvim/init.vim<CR> 
+
+" Копирование и вставка как в GUI
+vmap <C-c> "+y<Esc>i 
+vmap <C-x> "+d<Esc>i 
+imap <C-v> "+pi 
+imap <C-v> <Esc>"+pi 
+inoremap <C-a> <Esc>ggVG 
+
+" Копирование в системный буфер обмена
+noremap <Leader>y "+y 
+noremap <Leader>p "+p 
+noremap <Leader>Y "*y 
+noremap <Leader>P "*p 
+
+" Открытие сплитов с помощью Shift + Ctrl + стрелочек
+nnoremap <C-L> :vsplit<CR> 
+nnoremap <C-K> :split<CR> 
+
+
+" devicons: reasonable defaults from webinstall.dev/vim-devicons
+"source ~/.vim/plugins/devicons.vim
