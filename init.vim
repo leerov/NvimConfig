@@ -1,11 +1,15 @@
-" Автоматическая установка плагинов при первом запуске
-" Этот код автоматически установит плагины, которые еще не были установлены,
 " при первом запуске Vim, что позволяет управлять зависимостями легче.
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
     \| PlugInstall --sync | source $MYVIMRC
     \| endif
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+"workspases
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent execute "!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
 
 " Инициализация плагинов
 call plug#begin('~/.local/share/nvim/plugged')
@@ -15,12 +19,12 @@ Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'           
 Plug 'kaicataldo/material.vim', { 'branch': 'main' } 
 Plug 'jiangmiao/auto-pairs'              
-Plug '907th/vim-auto-save'               
+Plug '907th/vim-auto-save'
 Plug 'voldikss/vim-floaterm'             
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
 Plug 'terryma/vim-multiple-cursors'
 "Plug 'ryanoasis/vim-devicons'            
-
+Plug 'thaerkh/vim-workspace'
 call plug#end()
 
 " Включение поддержки плагинов по типу файла
@@ -29,7 +33,9 @@ filetype plugin on
 
 
 " Настройки плагинов
-
+let g:workspace_autocreate = 1
+let g:workspace_autosave_always = 1
+let g:workspace_autosave_ignore = ['gitcommit']
 let g:auto_save_write_all_buffers = 1        
 let g:webdevicons_enable_nerdtree = 1        
 let g:NERDTreeQuitOnOpen = 1                  
@@ -47,7 +53,7 @@ let g:floaterm_position = 'bottom'
 colorscheme material                            
 
 " Основные настройки редактирования
-set guifont=Hurmit\ Nerd\ Font:h11
+"set guifont=Hurmit\ Nerd\ Font:h11
 set noswapfile                                  
 set number                                      
 set relativenumber                               
@@ -58,7 +64,8 @@ set softtabstop=4
 set encoding=UTF-8                              
 set autoindent                                  
 set belloff=all
-
+" Mono hotkeys
+nnoremap <T> :tabnew<CR>
 " Сочетания клавиш для NERDTree и терминала
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <S-Z> :NERDTreeToggle<CR>
@@ -67,7 +74,7 @@ nnoremap <S-B> :!bash build.sh<CR>
 nnoremap <S-T> :FloatermToggle<CR> 
 
 " Новые сочетания клавиш
-nnoremap <C-w> :q<CR>          
+"nnoremap <C-w> :q<CR>          
 nnoremap <S-o> :FZF<CR>
 nnoremap <S-,> :e ~/.config/nvim/init.vim<CR> 
 
