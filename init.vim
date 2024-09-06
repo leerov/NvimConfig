@@ -18,7 +18,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 " Подключение популярных плагинов
 Plug 'preservim/nerdtree'                
-Plug 'vim-airline/vim-airline'           
+Plug 'vim-airline/vim-airline'
 Plug 'kaicataldo/material.vim', { 'branch': 'main' } 
 Plug 'jiangmiao/auto-pairs'              
 Plug '907th/vim-auto-save'               
@@ -39,7 +39,7 @@ filetype plugin on
 " Настройки плагинов
 let g:workspace_autocreate = 1
 let g:workspace_autosave_always = 1
-let g:workspace_autosave_ignore = ['gitcommit']
+let g:workspace_autosave_ignore = ['gitcommit', 'babineai']
 let g:auto_save_write_all_buffers = 1        
 let g:webdevicons_enable_nerdtree = 1        
 let g:NERDTreeQuitOnOpen = 1                  
@@ -84,8 +84,11 @@ set tabstop=4
 set shiftwidth=4                                
 set softtabstop=4                               
 set encoding=UTF-8                              
-set autoindent                                  
+set autoindent
 set belloff=all
+
+" Startify
+nnoremap <S-C> :Startify<CR>
 
 " Запустить мейк по f5
 nnoremap <F5> :FloatermNew make<CR>
