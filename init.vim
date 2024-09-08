@@ -7,6 +7,12 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" Сворачивание блоков кода
+autocmd Filetype * AnyFoldActivate
+let g:anyfold_fold_comments=1
+set foldlevel=0
+hi Folded term=NONE cterm=NONE
+
 "workspases
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent execute "!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
@@ -29,6 +35,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'Rip-Rip/clang_complete'
 Plug 'mhinz/vim-startify'
 Plug 'thaerkh/vim-workspace'
+Plug 'pseewald/vim-anyfold'
+Plug 'folke/which-key.nvim'
+Plug 'SirVer/ultisnips'
+Plug 'rhysd/vim-clang-format'
 call plug#end()
 
 " Включение поддержки плагинов по типу файла
@@ -37,6 +47,7 @@ filetype plugin on
 
 
 " Настройки плагинов
+let NERDTreeShowHidden=1
 let g:workspace_autocreate = 1
 let g:workspace_autosave_always = 1
 let g:workspace_autosave_ignore = ['gitcommit', 'babineai']
@@ -47,6 +58,11 @@ let g:webdevicons_enable = 1
 let g:airline_powerline_fonts = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:NERDTreeHighlightFolders = 1
+let g:clang_library_path = '/usr/lib/llvm-14/lib/libclang.so.1'
+let g:clang_format#style_options = {
+            \ "BasedOnStyle" : "Google",
+            \ "IndentWidth" : 4,
+            \ "ColumnLimit" : 110}
 
 "Clang-completer
 " Включить дополнительные подсказки (аргументы функций, шаблонов и т.д.)
@@ -78,20 +94,23 @@ set wildmode=longest:list,full
 set guifont=Hurmit\ Nerd\ Font:h11
 set noswapfile                                  
 set number                                      
-set relativenumber                               
+set relativenumber
 set smarttab                                    
 set tabstop=4                                   
 set shiftwidth=4                                
-set softtabstop=4                               
-set encoding=UTF-8                              
+set softtabstop=4
+set encoding=UTF-8
 set autoindent
 set belloff=all
-
+set mouse=a
 " Startify
 nnoremap <S-C> :Startify<CR>
 
 " Запустить мейк по f5
 nnoremap <F5> :FloatermNew make<CR>
+
+" Запустить билд
+nnoremap <F6> :FloatermNew make run<CR>
 
 " Сочетания клавиш для NERDTree и терминала
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -101,7 +120,6 @@ nnoremap <S-B> :!bash build.sh<CR>
 nnoremap <S-T> :FloatermToggle<CR> 
 
 " Новые сочетания клавиш
-nnoremap <C-w> :q<CR>          
 nnoremap <S-o> :FZF<CR>
 nnoremap <S-,> :e ~/.config/nvim/init.vim<CR> 
 
