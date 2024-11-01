@@ -48,7 +48,7 @@ Replace your-username and your-repo-name with your actual GitHub username and re
 Platform-Specific Instructions:
 
 • Linux (Debian/Ubuntu):
-git clone https://github.com/your-username/your-repo-name.git ~/.config/nvim
+```git clone https://github.com/leerov/NvimConfig.git ~/.config/nvim```
 #### 2. Clone this repository
   choco install neovim
 * **Windows (Chocolatey)**:
